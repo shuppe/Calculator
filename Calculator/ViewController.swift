@@ -10,9 +10,9 @@ import UIKit
 
 class ViewController: UIViewController
 {
-
+    
     @IBOutlet weak var display: UILabel!
-
+    
     var userIsInTheMiddleOfTypingANumber = false
     var numberIsDecimal = false
     var numberStack = Array<Double>()
@@ -25,10 +25,10 @@ class ViewController: UIViewController
         numberIsDecimal = false
         println("numberStack = \(numberStack)")
     }
-
+    
     @IBAction func appendDigit(sender: UIButton)
     {
-
+        
         let digit = sender.currentTitle!
         
         switch digit{
@@ -44,16 +44,14 @@ class ViewController: UIViewController
                 userIsInTheMiddleOfTypingANumber = true
             }
         default:
-            if (digit != "." || display.text!.rangeOfString(".")! != nil) {
-                if userIsInTheMiddleOfTypingANumber
-                {
-                    display.text! = display.text! + digit
-                }
-                else
-                {
-                    display.text! = digit
-                    userIsInTheMiddleOfTypingANumber = true
-                }
+            if userIsInTheMiddleOfTypingANumber
+            {
+                display.text! = display.text! + digit
+            }
+            else
+            {
+                display.text! = digit
+                userIsInTheMiddleOfTypingANumber = true
             }
         }
         
@@ -68,15 +66,15 @@ class ViewController: UIViewController
         
         switch operation
         {
-            case "×": performOperation {$0 * $1}
-            case "÷": performOperation {$1 / $0}
-            case "+": performOperation {$0 + $1}
-            case "−": performOperation {$1 - $0}
-            case "√": performOperation {sqrt($0)}
-            case "cos": performOperation {cos($0)}
-            case "sin": performOperation {sin($0)}
+        case "×": performOperation {$0 * $1}
+        case "÷": performOperation {$1 / $0}
+        case "+": performOperation {$0 + $1}
+        case "−": performOperation {$1 - $0}
+        case "√": performOperation {sqrt($0)}
+        case "cos": performOperation {cos($0)}
+        case "sin": performOperation {sin($0)}
             
-            default:break
+        default:break
         }
     }
     
@@ -118,6 +116,6 @@ class ViewController: UIViewController
             userIsInTheMiddleOfTypingANumber = false
         }
     }
-        
+    
 }
 
