@@ -17,6 +17,8 @@ class ViewController: UIViewController
     var numberIsDecimal = false
     var numberStack = Array<Double>()
     
+    let constants = ["π": M_PI]
+    
     @IBAction func enter()
     {
         
@@ -73,6 +75,7 @@ class ViewController: UIViewController
         case "√": performOperation {sqrt($0)}
         case "cos": performOperation {cos($0)}
         case "sin": performOperation {sin($0)}
+        case "π": performOperation(operation)
             
         default:break
         }
@@ -81,7 +84,6 @@ class ViewController: UIViewController
     
     func performOperation (operation: (Double, Double) ->Double)
     {
-        var result = 0.0
         if numberStack.count >= 2 {
             displayValue = operation(numberStack.removeLast(), numberStack.removeLast())
             enter()
@@ -90,18 +92,24 @@ class ViewController: UIViewController
     
     func performOperation (operation: (Double) ->Double)
     {
-        var result = 0.0
         if numberStack.count >= 1 {
             displayValue = operation(numberStack.removeLast())
             enter()
         }
     }
     
-    func addDecimalPoint() {}
+    func performOperation (op: String)
+    {
+            displayValue = constants[op]!
+            enter()
+        
+    }
     
     @IBAction func clearDisplay() {
         display.text! = "0"
+        numberStack.removeAll()
         userIsInTheMiddleOfTypingANumber = false
+        println("numberStack = \(numberStack)")
     }
     
     
