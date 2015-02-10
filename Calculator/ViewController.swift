@@ -12,6 +12,7 @@ class ViewController: UIViewController
 {
     
     @IBOutlet weak var display: UILabel!
+    @IBOutlet weak var history: UILabel!
     
     var userIsInTheMiddleOfTypingANumber = false
     var numberIsDecimal = false
@@ -23,6 +24,7 @@ class ViewController: UIViewController
     {
         
         numberStack.append(displayValue)
+        addToHistory("\(displayValue)")
         userIsInTheMiddleOfTypingANumber = false
         numberIsDecimal = false
         println("numberStack = \(numberStack)")
@@ -32,7 +34,6 @@ class ViewController: UIViewController
     {
         
         let digit = sender.currentTitle!
-        
         
         if userIsInTheMiddleOfTypingANumber
         {
@@ -49,6 +50,7 @@ class ViewController: UIViewController
     @IBAction func compute(sender: UIButton)
     {
         let operation = sender.currentTitle!
+        addToHistory(operation)
         if userIsInTheMiddleOfTypingANumber {
             enter()
         }
@@ -99,7 +101,11 @@ class ViewController: UIViewController
         println("numberStack = \(numberStack)")
     }
     
-    
+    func addToHistory (op: String)
+    {
+            history.text = history.text! + ", \(op)"
+    }
+
     var displayValue: Double {
         get {
             if display.text! == "." { display.text! = "0" }
