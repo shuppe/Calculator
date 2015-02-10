@@ -33,28 +33,15 @@ class ViewController: UIViewController
         
         let digit = sender.currentTitle!
         
-        switch digit{
-        case "." :
-            if !numberIsDecimal
-            {
-                if (!userIsInTheMiddleOfTypingANumber)
-                {
-                    clearDisplay()
-                }
-                numberIsDecimal = true
-                display.text! = display.text! + digit
-                userIsInTheMiddleOfTypingANumber = true
-            }
-        default:
-            if userIsInTheMiddleOfTypingANumber
-            {
-                display.text! = display.text! + digit
-            }
-            else
-            {
-                display.text! = digit
-                userIsInTheMiddleOfTypingANumber = true
-            }
+        
+        if userIsInTheMiddleOfTypingANumber
+        {
+            display.text! = display.text! + (digit == "." ? (display.text!.rangeOfString(digit) == nil ? digit : "") : digit)
+        }
+        else
+        {
+            display.text! = digit
+            userIsInTheMiddleOfTypingANumber = true
         }
         
     }
@@ -115,6 +102,7 @@ class ViewController: UIViewController
     
     var displayValue: Double {
         get {
+            if display.text! == "." { display.text! = "0" }
             return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
             
         }
