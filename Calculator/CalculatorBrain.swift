@@ -10,5 +10,12 @@ import Foundation
 
 class CalculatorBrain
 {
+    enum Op {
+        case Operand(Double)
+        case UnaryOperation(String, Double -> Double)
+        case BinaryOpration(String, (Double, Double) ->Double)
+    }
+    
+    var OpStack = [Op]()
     
 }
