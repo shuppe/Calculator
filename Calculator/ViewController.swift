@@ -23,11 +23,11 @@ class ViewController: UIViewController
     @IBAction func enter()
     {
         
-        numberStack.append(displayValue)
-        addToHistory("\(displayValue)")
+        if (displayValue != nil) {numberStack.append(displayValue!)
+        addToHistory("\(displayValue!)")
         userIsInTheMiddleOfTypingANumber = false
         numberIsDecimal = false
-        println("numberStack = \(numberStack)")
+            println("numberStack = \(numberStack)")}
     }
     
     @IBAction func appendDigit(sender: UIButton)
@@ -47,6 +47,24 @@ class ViewController: UIViewController
         
     }
     
+    @IBAction func backspace() {
+        if userIsInTheMiddleOfTypingANumber
+        {
+            if (countElements(display.text!) == 1)
+            {
+                display.text! = "0"
+                userIsInTheMiddleOfTypingANumber = false
+            }
+            else
+            {
+                
+                display.text! = dropLast(display.text!)
+                
+            }
+        }
+        
+    }
+    
     @IBAction func compute(sender: UIButton)
     {
         let operation = sender.currentTitle!
@@ -54,7 +72,6 @@ class ViewController: UIViewController
         if userIsInTheMiddleOfTypingANumber {
             enter()
         }
-        
         switch operation
         {
         case "×": performOperation {$0 * $1}
@@ -62,8 +79,10 @@ class ViewController: UIViewController
         case "+": performOperation {$0 + $1}
         case "−": performOperation {$1 - $0}
         case "√": performOperation {sqrt($0)}
+        case "±": performOperation {$0 * -1.0}
         case "cos": performOperation {cos($0)}
         case "sin": performOperation {sin($0)}
+            
         case "π": performOperation(operation)
             
         default:break
@@ -75,7 +94,9 @@ class ViewController: UIViewController
     {
         if numberStack.count >= 2 {
             displayValue = operation(numberStack.removeLast(), numberStack.removeLast())
+            addToHistory("=")
             enter()
+
         }
     }
     
@@ -83,38 +104,49 @@ class ViewController: UIViewController
     {
         if numberStack.count >= 1 {
             displayValue = operation(numberStack.removeLast())
+            addToHistory("=")
             enter()
         }
     }
     
     func performOperation (op: String)
     {
-            displayValue = constants[op]!
-            enter()
+        displayValue = constants[op]!
+        enter()
         
     }
     
     @IBAction func clearDisplay() {
         display.text! = "0"
+        history.text! = ""
         numberStack.removeAll()
-        userIsInTheMiddleOfTypingANumber = false
         println("numberStack = \(numberStack)")
+        userIsInTheMiddleOfTypingANumber = false
     }
     
     func addToHistory (op: String)
     {
-            history.text = history.text! + ", \(op)"
+        history.text = history.text! + "\(op)"
     }
-
-    var displayValue: Double {
+    
+    var displayValue: Double? {
         get {
             if display.text! == "." { display.text! = "0" }
-            return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
+            let disp = NSNumberFormatter().numberFromString(display.text!)
+            switch disp
+            {
+                case .Some(let value): return value.doubleValue
+                case .None:
+                    clearDisplay()
+                    return nil
+            }
+            
+            
             
         }
         
         set{
-            display.text = "\(newValue)"
+            display.text = "\(newValue!)"
             userIsInTheMiddleOfTypingANumber = false
         }
     }
